@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { HtmlNav } from './HtmlNav';
-// NOTE: You may need to adjust this import path to match your project's structure.
-import type { Highlight } from '../types'; // Assuming your types are in 'src/types/index.ts'
+import type { Highlight } from '../types';
 
 interface HtmlViewerProps {
   currentPage: number;
@@ -20,8 +19,13 @@ export const HtmlViewer: React.FC<HtmlViewerProps> = ({
   const [supCount, setSupCount] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [zoom, setZoom] = useState(1); // State for zoom level
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  // Zoom handlers
+  const handleZoomIn = () => setZoom(prev => prev + 0.1);
+  const handleZoomOut = () => setZoom(prev => Math.max(0.2, prev - 0.1)); // Set minimum zoom to 20%
 
   useEffect(() => {
     const loadHtmlContent = async () => {
@@ -47,7 +51,7 @@ export const HtmlViewer: React.FC<HtmlViewerProps> = ({
         );
         htmlContent = htmlContent.replace(
           /<head>(.*?)<\/head>/s,
-          `<head>$1<style>body { font-size: 25px; }</style></head>`
+          `<head>$1<style>body { font-size: 20px; }</style></head>`
         );
 
         setContent(htmlContent);
@@ -101,7 +105,13 @@ export const HtmlViewer: React.FC<HtmlViewerProps> = ({
 
   return (
     <div className="flex flex-col h-full bg-white">
-      <HtmlNav currentPage={currentPage} supCount={supCount} />
+      <HtmlNav
+        currentPage={currentPage}
+        supCount={supCount}
+        zoomLevel={zoom}
+        onZoomIn={handleZoomIn}
+        onZoomOut={handleZoomOut}
+      />
 
       <div className="flex-1 overflow-auto bg-gray-50 p-4">
         {isLoading ? (
@@ -114,7 +124,16 @@ export const HtmlViewer: React.FC<HtmlViewerProps> = ({
             <p className="text-red-600 mt-1">{error}</p>
           </div>
         ) : (
-          <div className="relative w-full h-full">
+          <div
+            className="relative transition-transform"
+            style={{
+              transform: `scale(${zoom})`,
+              transformOrigin: 'top left',
+              // The container needs to have a defined size for scaling to work within the scrollable area
+              width: '100%',
+              height: '100%',
+            }}
+          >
             <iframe
               ref={iframeRef}
               srcDoc={content}
@@ -131,7 +150,7 @@ export const HtmlViewer: React.FC<HtmlViewerProps> = ({
                     left: `${highlight.x}px`,
                     width: `${highlight.width}px`,
                     height: `${highlight.height}px`,
-                    backgroundColor: 'rgba(255, 0, 0, 0.4)', // Semi-transparent red
+                    backgroundColor: 'rgba(255, 0, 0, 0.4)',
                     borderRadius: '2px',
                   }}
                 />

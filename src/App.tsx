@@ -4,6 +4,11 @@ import { PdfViewer } from './components/PdfViewer';
 import { HtmlViewer } from './components/HtmlViewer';
 import { useHighlights } from './hooks/useHighlights';
 
+// Add these two lines
+import 'react-pdf/dist/Page/AnnotationLayer.css';
+import 'react-pdf/dist/Page/TextLayer.css';
+
+
 function App() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -47,9 +52,6 @@ function App() {
           <PdfViewer
             currentPage={currentPage}
             onLoadSuccess={handlePdfLoadSuccess}
-            highlights={highlights}
-            onAddHighlight={addHighlight}
-            isHighlightMode={isHighlightMode}
           />
         </div>
 

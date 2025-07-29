@@ -22,8 +22,12 @@ export const PdfNav: React.FC<PdfNavProps> = ({ scale, onScaleChange, onReset })
 
   return (
     <div className="flex items-center justify-between p-3 bg-gray-50 border-b border-gray-200">
-      <h2 className="font-semibold text-gray-800">PDF Document</h2>
+      {/* Left: Title */}
+      <div className="flex-1">
+        <h2 className="font-semibold text-gray-800">PDF Document</h2>
+      </div>
       
+      {/* Center: Zoom Controls */}
       <div className="flex items-center space-x-2">
         <button
           onClick={handleZoomOut}
@@ -34,7 +38,7 @@ export const PdfNav: React.FC<PdfNavProps> = ({ scale, onScaleChange, onReset })
           <ZoomOut size={16} />
         </button>
 
-        <span className="text-sm font-medium text-gray-600 px-2">
+        <span className="text-sm font-medium text-gray-600 px-2 w-16 text-center">
           {Math.round(scale * 100)}%
         </span>
 
@@ -46,7 +50,10 @@ export const PdfNav: React.FC<PdfNavProps> = ({ scale, onScaleChange, onReset })
         >
           <ZoomIn size={16} />
         </button>
+      </div>
 
+      {/* Right: Reset Button */}
+      <div className="flex-1 flex justify-end">
         <button
           onClick={handleReset}
           className="p-2 rounded-lg bg-white hover:bg-gray-100 shadow-sm border border-gray-200 transition-colors"
