@@ -11,7 +11,7 @@ interface HtmlViewerProps {
 
 export const HtmlViewer: React.FC<HtmlViewerProps> = ({
   currentPage,
-  highlights,
+  highlights, 
   isHighlightMode,
   onAddHighlight,
 }) => {
@@ -19,13 +19,12 @@ export const HtmlViewer: React.FC<HtmlViewerProps> = ({
   const [supCount, setSupCount] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [zoom, setZoom] = useState(1); // State for zoom level
-
+  const [zoom, setZoom] = useState(1);
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   // Zoom handlers
   const handleZoomIn = () => setZoom(prev => prev + 0.1);
-  const handleZoomOut = () => setZoom(prev => Math.max(0.2, prev - 0.1)); // Set minimum zoom to 20%
+  const handleZoomOut = () => setZoom(prev => Math.max(0.2, prev - 0.1));
 
   useEffect(() => {
     const loadHtmlContent = async () => {

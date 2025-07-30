@@ -14,7 +14,7 @@ export const PdfViewer: React.FC<PdfViewerProps> = ({
   onLoadSuccess,
 }) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [scale, setScale] = useState(1.0); // State for PDF zoom
+  const [scale, setScale] = useState(1.0);
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState<number | undefined>();
 
@@ -49,7 +49,7 @@ export const PdfViewer: React.FC<PdfViewerProps> = ({
         onScaleChange={setScale}
         onReset={handleReset}
       />
-      
+      { /*  Main PDF Display Area */}
       <div className="flex-1 overflow-auto bg-gray-100">
         <div 
           ref={containerRef}
