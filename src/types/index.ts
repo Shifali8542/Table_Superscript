@@ -24,3 +24,10 @@ export interface HtmlViewerState {
   isLoading: boolean;
   error: string | null;
 }
+
+export interface StyleCounts {
+  bold: number;
+  italic: number;
+  boldItalic: number;
+  superscript: number;
+}

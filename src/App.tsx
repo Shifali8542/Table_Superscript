@@ -5,11 +5,19 @@ import { HtmlViewer } from './components/HtmlViewer';
 import { useHighlights } from './hooks/useHighlights';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
+import type { StyleCounts } from './types';
 
 
 function App() {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [totalPages, setTotalPages] = React.useState(0);
+  const [activeFilter, setActiveFilter] = React.useState<string | null>(null);
+  const [styleCounts, setStyleCounts] = React.useState<StyleCounts>({
+    bold: 0,
+    italic: 0,
+    boldItalic: 0,
+    superscript: 0,
+  });
 
   const {
     highlights,
@@ -29,6 +37,15 @@ function App() {
     setCurrentPage(page);
   };
 
+  const handleFilterChange = (filter: string) => {
+    setActiveFilter(prev => (prev === filter ? null : filter));
+  };
+
+  const handleStyleCountsChange = (counts: StyleCounts) => {
+    setStyleCounts(counts);
+  };
+
+
   return (
     <div className="h-screen flex flex-col bg-gray-100">
       {/* Navigation Bar */}
@@ -41,6 +58,9 @@ function App() {
         onUndo={removeLastHighlight}
         onDeleteAll={clearAllHighlights}
         canUndo={canUndo}
+        onFilterChange={handleFilterChange}
+        activeFilter={activeFilter}
+        styleCounts={styleCounts}
       />
 
       {/* Main Content Area */}
@@ -60,6 +80,8 @@ function App() {
             highlights={highlights}
             onAddHighlight={addHighlight}
             isHighlightMode={isHighlightMode}
+            activeFilter={activeFilter}
+            onStyleCountsChange={handleStyleCountsChange}
           />
         </div>
       </div>

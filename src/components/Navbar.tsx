@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, Edit3, Undo, Trash2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Edit3, Undo, Trash2, Filter } from 'lucide-react';
+import type { StyleCounts } from '../types';
 
 interface NavbarProps {
   currentPage: number;
@@ -10,6 +11,9 @@ interface NavbarProps {
   onUndo: () => void;
   onDeleteAll: () => void;
   canUndo: boolean;
+  activeFilter: string | null;
+  onFilterChange: (filter: string) => void;
+  styleCounts: StyleCounts;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -20,9 +24,13 @@ export const Navbar: React.FC<NavbarProps> = ({
   isHighlightMode,
   onUndo,
   onDeleteAll,
-  canUndo
+  canUndo,
+  activeFilter,
+  onFilterChange,
+  styleCounts,
 }) => {
   const [pageInput, setPageInput] = useState(currentPage.toString());
+  const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false);
 
   const handlePageInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPageInput(e.target.value);
@@ -56,8 +64,24 @@ export const Navbar: React.FC<NavbarProps> = ({
     setPageInput(currentPage.toString());
   }, [currentPage]);
 
+  const FilterButton: React.FC<{ name: string; filterKey: keyof StyleCounts }> = ({ name, filterKey }) => (
+    <button
+      onClick={() => onFilterChange(filterKey)}
+      className={`flex justify-between items-center w-full px-3 py-2 text-sm rounded-md transition-colors ${
+        activeFilter === filterKey
+          ? 'bg-blue-600 text-white'
+          : 'text-gray-200 hover:bg-slate-600'
+      }`}
+    >
+      <span>{name}</span>
+      <span className="bg-slate-500 text-white text-xs font-semibold px-2 py-0.5 rounded-full">
+        {styleCounts[filterKey]}
+      </span>
+    </button>
+  );
+
   return (
-    <nav className="bg-slate-800 text-white px-6 py-4 shadow-lg">
+    <nav className="bg-slate-800 text-white px-6 py-4 shadow-lg z-10">
       <div className="flex items-center justify-between">
         {/* Left: Title */}
         <div className="flex items-center">
@@ -96,8 +120,9 @@ export const Navbar: React.FC<NavbarProps> = ({
           </button>
         </div>
 
-        {/* Right: Highlighting Tools */}
+        {/* Right: Tools */}
         <div className="flex items-center space-x-3">
+          {/* Highlighting Tools */}
           <button
             onClick={onHighlightModeToggle}
             className={`p-2 rounded-lg transition-colors ${
@@ -126,6 +151,29 @@ export const Navbar: React.FC<NavbarProps> = ({
           >
             <Trash2 size={20} />
           </button>
+
+          {/* Filter Tools */}
+          <div className="relative">
+            <button
+              onClick={() => setIsFilterMenuOpen(prev => !prev)}
+              className={`p-2 rounded-lg transition-colors ${
+                isFilterMenuOpen || activeFilter
+                  ? 'bg-blue-600 hover:bg-blue-700'
+                  : 'bg-slate-700 hover:bg-slate-600'
+              }`}
+              title="Toggle Style Filters"
+            >
+              <Filter size={20} />
+            </button>
+            {isFilterMenuOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-slate-700 rounded-lg shadow-xl p-2 space-y-1">
+                <FilterButton name="Bold" filterKey="bold" />
+                <FilterButton name="Italic" filterKey="italic" />
+                <FilterButton name="Bold-Italic" filterKey="boldItalic" />
+                <FilterButton name="Superscript" filterKey="superscript" />
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </nav>

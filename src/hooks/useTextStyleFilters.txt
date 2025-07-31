@@ -1,0 +1,49 @@
+import { useState, useCallback } from 'react';
+
+export interface TextStyleCounts {
+  bold: number;
+  italic: number;
+  boldItalic: number;
+  superscript: number;
+}
+
+export interface TextStyleFilters {
+  bold: boolean;
+  italic: boolean;
+  boldItalic: boolean;
+  superscript: boolean;
+}
+
+export const useTextStyleFilters = () => {
+  const [textStyleCounts, setTextStyleCounts] = useState<TextStyleCounts>({
+    bold: 0,
+    italic: 0,
+    boldItalic: 0,
+    superscript: 0,
+  });
+
+  const [textStyleFilters, setTextStyleFilters] = useState<TextStyleFilters>({
+    bold: false,
+    italic: false,
+    boldItalic: false,
+    superscript: false,
+  });
+
+  const toggleTextStyleFilter = useCallback((style: keyof TextStyleFilters) => {
+    setTextStyleFilters(prev => ({
+      ...prev,
+      [style]: !prev[style]
+    }));
+  }, []);
+
+  const updateTextStyleCounts = useCallback((counts: TextStyleCounts) => {
+    setTextStyleCounts(counts);
+  }, []);
+
+  return {
+    textStyleCounts,
+    textStyleFilters,
+    toggleTextStyleFilter,
+    updateTextStyleCounts
+  };
+};
