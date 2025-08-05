@@ -1,6 +1,7 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { PdfNav } from './PdfNav';
+import './PdfViewer.scss'; // Import the new SCSS file
 
 pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
 
@@ -25,8 +26,9 @@ export const PdfViewer: React.FC<PdfViewerProps> = ({
 
   useEffect(() => {
     const setWidth = () => {
+      // Set width for scaling, subtracting padding for better fit
       if (containerRef.current) {
-        setContainerWidth(containerRef.current.clientWidth);
+        setContainerWidth(containerRef.current.clientWidth - 40);
       }
     };
     setWidth();
@@ -42,37 +44,32 @@ export const PdfViewer: React.FC<PdfViewerProps> = ({
   }, []);
 
   return (
-    <div className="flex flex-col h-full bg-white">
+    <div className="pdf-viewer">
       {/* PdfNav for zoom controls */}
       <PdfNav 
         scale={scale}
         onScaleChange={setScale}
         onReset={handleReset}
       />
-      { /*  Main PDF Display Area */}
-      <div className="flex-1 overflow-auto bg-gray-100">
-        <div 
-          ref={containerRef}
-          className="relative"
-        >
+      {/* Main PDF Display Area */}
+      <div className="pdf-viewer__content-area" ref={containerRef}>
+        <div className="pdf-viewer__document-container">
           {isLoading && (
-            <div className="flex items-center justify-center h-96">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <div className="pdf-viewer__loader-container">
+              <div className="pdf-viewer__spinner"></div>
             </div>
           )}
           
-          <div className="relative">
+          <div>
             <Document
               file="/sample.pdf"
               onLoadSuccess={handleDocumentLoadSuccess}
               loading=""
-              className="flex"
             >
               <Page
                 pageNumber={currentPage}
-                // Apply scale to the page width
                 width={containerWidth ? containerWidth * scale : undefined}
-                className="shadow-lg"
+                scale={1} // Use width for scaling primarily
               />
             </Document>
           </div>

@@ -1,0 +1,111 @@
+// HtmlViewer.scss
+
+// Color and style variables
+$viewer-bg: #ffffff;
+$content-bg: #f9fafb; // gray-50
+$spinner-color: #16a34a; // green-600
+$error-bg: #fef2f2; // red-50
+$error-border: #fecaca; // red-200
+$error-title-text: #991b1b; // red-800
+$error-message-text: #dc2626; // red-600
+$highlight-bg: rgba(255, 0, 0, 0.4);
+
+// Main container for the viewer
+.html-viewer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: $viewer-bg;
+
+  // Area where the iframe content is displayed
+  &__content-area {
+    flex: 1;
+    overflow: auto;
+    background-color: $content-bg;
+    padding: 1rem;
+  }
+
+  // Container for the loading spinner
+  &__loader-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+
+  // The loading spinner animation
+  &__spinner {
+    height: 3rem;
+    width: 3rem;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    border-bottom-color: $spinner-color;
+    animation: spin 1s linear infinite;
+  }
+
+  // Keyframes for the spinner animation
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  // Styling for the error message box
+  &__error-box {
+    background-color: $error-bg;
+    border: 1px solid $error-border;
+    border-radius: 0.5rem;
+    padding: 1rem;
+  }
+
+  // Styling for the error title
+  &__error-title {
+    color: $error-title-text;
+    font-weight: 600;
+  }
+
+  // Styling for the error message text
+  &__error-message {
+    color: $error-message-text;
+    margin-top: 0.25rem;
+  }
+
+  // Wrapper for the iframe to handle scaling/zoom
+  &__iframe-wrapper {
+    position: relative;
+    transition: transform 0.2s ease-in-out;
+    transform-origin: top left;
+    width: 100%;
+    height: 100%;
+  }
+
+  // The iframe element itself
+  &__iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    background-color: $viewer-bg;
+  }
+
+  // Overlay for displaying highlights
+  &__highlight-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; // Allows mouse events to pass through to the iframe
+  }
+
+  // Individual highlight box
+  &__highlight {
+    position: absolute;
+    background-color: $highlight-bg;
+    border-radius: 2px;
+  }
+}

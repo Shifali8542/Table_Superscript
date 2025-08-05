@@ -1,0 +1,201 @@
+// Variables for colors and spacing to maintain consistency
+$primary-bg: #1e293b; // slate-800
+$secondary-bg: #334155; // slate-700
+$tertiary-bg: #475569; // slate-600
+$quaternary-bg: #64748b; // slate-500
+$primary-text: #ffffff;
+$secondary-text: #e2e8f0; // gray-200
+$accent-blue: #93c5fd; // blue-300
+$action-blue: #2563eb; // blue-600
+$action-blue-hover: #1d4ed8; // blue-700
+$action-red: #dc2626; // red-600
+$action-red-hover: #b91c1c; // red-700
+$border-color: #475569; // slate-600
+$focus-border-color: #60a5fa; // blue-400
+$app-bg: #f3f4f6; // gray-100
+$app-border: #d1d5db; // gray-300
+
+// --- App Layout Styles ---
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: $app-bg;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+.pdf-viewer-container {
+  width: 50%;
+  border-right: 1px solid $app-border;
+}
+
+.html-viewer-container {
+  width: 50%;
+}
+
+
+// --- Navbar Styles ---
+
+.navbar {
+  background-color: $primary-bg;
+  color: $primary-text;
+  padding: 0.5rem, 0.75rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  z-index: 10;
+
+  .navbar-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  // Left Section: Title
+  .navbar-left {
+    display: flex;
+    align-items: center;
+    .navbar-title {
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: $accent-blue;
+    }
+  }
+
+  // Center Section: Page Navigation
+  .navbar-center {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .page-form {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .page-label {
+    font-size: 0.875rem;
+  }
+
+  .page-input {
+    width: 4rem;
+    padding: 0.25rem 0.5rem;
+    text-align: center;
+    background-color: $secondary-bg;
+    border-radius: 0.25rem;
+    border: 1px solid $border-color;
+    transition: border-color 0.2s;
+    color: $primary-text;
+
+    &:focus {
+      border-color: $focus-border-color;
+      outline: none;
+    }
+  }
+
+  // Right Section: Tools
+  .navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  // Generic Button Styles
+  .nav-button, .tool-button {
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background-color: $secondary-bg;
+    transition: background-color 0.2s, opacity 0.2s;
+    border: none;
+    color: white;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $tertiary-bg;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  // Specific Tool Button Styles
+  .tool-button {
+    &--highlight.active {
+      background-color: $action-red;
+      &:hover {
+        background-color: $action-red-hover;
+      }
+    }
+    &--delete:hover {
+        background-color: $action-red;
+    }
+    &--filter.active {
+      background-color: $action-blue;
+      &:hover {
+        background-color: $action-blue-hover;
+      }
+    }
+  }
+
+
+  // Filter Menu
+  .filter-menu-container {
+    position: relative;
+  }
+
+  .filter-menu {
+    position: absolute;
+    right: 0;
+    margin-top: 0.5rem;
+    width: 12rem;
+    background-color: $secondary-bg;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .filter-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    border-radius: 0.375rem;
+    transition: background-color 0.2s, color 0.2s;
+    border: none;
+    cursor: pointer;
+    background-color: transparent;
+    color: $secondary-text;
+    text-align: left;
+
+    &:hover {
+      background-color: $tertiary-bg;
+    }
+
+    &--active {
+      background-color: $action-blue;
+      color: $primary-text;
+    }
+  }
+
+  .filter-count {
+    background-color: $quaternary-bg;
+    color: $primary-text;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.125rem 0.5rem;
+    border-radius: 9999px;
+  }
+}

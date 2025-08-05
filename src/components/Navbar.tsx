@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Edit3, Undo, Trash2, Filter } from 'lucide-react';
 import type { StyleCounts } from '../types';
+import './Nav.scss'; // Import the SCSS file
 
 interface NavbarProps {
   currentPage: number;
@@ -48,88 +49,82 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   const handlePrevious = () => {
     if (currentPage > 1) {
-      onPageChange(currentPage - 1);
-      setPageInput((currentPage - 1).toString());
+      const newPage = currentPage - 1;
+      onPageChange(newPage);
+      setPageInput(newPage.toString());
     }
   };
 
   const handleNext = () => {
     if (currentPage < totalPages) {
-      onPageChange(currentPage + 1);
-      setPageInput((currentPage + 1).toString());
+      const newPage = currentPage + 1;
+      onPageChange(newPage);
+      setPageInput(newPage.toString());
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     setPageInput(currentPage.toString());
   }, [currentPage]);
 
   const FilterButton: React.FC<{ name: string; filterKey: keyof StyleCounts }> = ({ name, filterKey }) => (
     <button
       onClick={() => onFilterChange(filterKey)}
-      className={`flex justify-between items-center w-full px-3 py-2 text-sm rounded-md transition-colors ${
-        activeFilter === filterKey
-          ? 'bg-blue-600 text-white'
-          : 'text-gray-200 hover:bg-slate-600'
-      }`}
+      className={`filter-button ${activeFilter === filterKey ? 'filter-button--active' : ''}`}
     >
       <span>{name}</span>
-      <span className="bg-slate-500 text-white text-xs font-semibold px-2 py-0.5 rounded-full">
+      <span className="filter-count">
         {styleCounts[filterKey]}
       </span>
     </button>
   );
 
   return (
-    <nav className="bg-slate-800 text-white px-6 py-4 shadow-lg z-10">
-      <div className="flex items-center justify-between">
+    <nav className="navbar">
+      <div className="navbar-content">
         {/* Left: Title */}
-        <div className="flex items-center">
-          <h1 className="text-xl font-bold text-blue-300">PDF vs HTML</h1>
+        <div className="navbar-left">
+          <h1 className="navbar-title">PDF vs HTML</h1>
         </div>
 
         {/* Center: Page Navigation */}
-        <div className="flex items-center space-x-4">
+        <div className="navbar-center">
           <button
             onClick={handlePrevious}
             disabled={currentPage <= 1}
-            className="p-2 rounded-lg bg-slate-700 hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="nav-button"
           >
             <ChevronLeft size={20} />
           </button>
 
-          <form onSubmit={handlePageInputSubmit} className="flex items-center space-x-2">
-            <span className="text-sm">Page</span>
+          <form onSubmit={handlePageInputSubmit} className="page-form">
+            <span className="page-label">Page</span>
             <input
               type="number"
               value={pageInput}
               onChange={handlePageInputChange}
               min={1}
               max={totalPages}
-              className="w-16 px-2 py-1 text-center bg-slate-700 rounded border border-slate-600 focus:border-blue-400 focus:outline-none"
+              className="page-input"
             />
-            <span className="text-sm">of {totalPages}</span>
+            <span className="page-label">of {totalPages}</span>
           </form>
 
           <button
             onClick={handleNext}
             disabled={currentPage >= totalPages}
-            className="p-2 rounded-lg bg-slate-700 hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="nav-button"
           >
             <ChevronRight size={20} />
           </button>
         </div>
 
         {/* Right: Tools */}
-        <div className="flex items-center space-x-3">
+        <div className="navbar-right">
           {/* Highlighting Tools */}
           <button
             onClick={onHighlightModeToggle}
-            className={`p-2 rounded-lg transition-colors ${
-              isHighlightMode 
-                ? 'bg-red-600 hover:bg-red-700' 
-                : 'bg-slate-700 hover:bg-slate-600'
-            }`}
+            className={`tool-button tool-button--highlight ${isHighlightMode ? 'active' : ''}`}
             title="Toggle Highlight Mode"
           >
             <Edit3 size={20} />
@@ -138,7 +133,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           <button
             onClick={onUndo}
             disabled={!canUndo}
-            className="p-2 rounded-lg bg-slate-700 hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="tool-button"
             title="Undo Last Highlight"
           >
             <Undo size={20} />
@@ -146,27 +141,23 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           <button
             onClick={onDeleteAll}
-            className="p-2 rounded-lg bg-slate-700 hover:bg-red-600 transition-colors"
+            className="tool-button tool-button--delete"
             title="Delete All Highlights"
           >
             <Trash2 size={20} />
           </button>
 
           {/* Filter Tools */}
-          <div className="relative">
+          <div className="filter-menu-container">
             <button
               onClick={() => setIsFilterMenuOpen(prev => !prev)}
-              className={`p-2 rounded-lg transition-colors ${
-                isFilterMenuOpen || activeFilter
-                  ? 'bg-blue-600 hover:bg-blue-700'
-                  : 'bg-slate-700 hover:bg-slate-600'
-              }`}
+              className={`tool-button tool-button--filter ${isFilterMenuOpen || activeFilter ? 'active' : ''}`}
               title="Toggle Style Filters"
             >
               <Filter size={20} />
             </button>
             {isFilterMenuOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-slate-700 rounded-lg shadow-xl p-2 space-y-1">
+              <div className="filter-menu">
                 <FilterButton name="Bold" filterKey="bold" />
                 <FilterButton name="Italic" filterKey="italic" />
                 <FilterButton name="Bold-Italic" filterKey="boldItalic" />

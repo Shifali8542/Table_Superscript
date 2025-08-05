@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Navbar } from './components/Navbar';
 import { PdfViewer } from './components/PdfViewer';
 import { HtmlViewer } from './components/HtmlViewer';
@@ -6,7 +6,7 @@ import { useHighlights } from './hooks/useHighlights';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 import type { StyleCounts } from './types';
-
+import './components/Nav.scss';
 
 function App() {
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -45,9 +45,8 @@ function App() {
     setStyleCounts(counts);
   };
 
-
   return (
-    <div className="h-screen flex flex-col bg-gray-100">
+    <div className="app-container">
       {/* Navigation Bar */}
       <Navbar
         currentPage={currentPage}
@@ -64,9 +63,9 @@ function App() {
       />
 
       {/* Main Content Area */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="main-content">
         {/* Left Side: PDF Viewer */}
-        <div className="w-1/2 border-r border-gray-300">
+        <div className="pdf-viewer-container">
           <PdfViewer
             currentPage={currentPage}
             onLoadSuccess={handlePdfLoadSuccess}
@@ -74,7 +73,7 @@ function App() {
         </div>
 
         {/* Right Side: HTML Viewer */}
-        <div className="w-1/2">
+        <div className="html-viewer-container">
           <HtmlViewer
             currentPage={currentPage}
             highlights={highlights}

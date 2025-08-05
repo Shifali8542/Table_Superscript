@@ -1,0 +1,90 @@
+// HtmlNav.scss
+
+// Variables for colors and spacing
+$nav-bg: #f9fafb; // gray-50
+$nav-border: #e5e7eb; // gray-200
+$text-primary: #1f2937; // gray-800
+$text-secondary: #4b5563; // gray-600
+$text-tertiary: #374151; // gray-700
+$text-separator: #d1d5db; // gray-300
+$text-highlight: #16a34a; // green-600
+$button-hover-bg: #e5e7eb; // gray-200
+
+.html-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem, 0.75rem;
+  background-color: $nav-bg;
+  border-bottom: 1px solid $nav-border;
+
+  // Left section: Title
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    .icon {
+      color: $text-secondary;
+    }
+
+    .title {
+      font-weight: 600;
+      color: $text-primary;
+    }
+  }
+
+  // Center section: Zoom Controls
+  &__center {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  // Right section: Info
+  &__right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.875rem;
+    color: $text-secondary;
+
+    .info-item {
+      font-weight: 500;
+    }
+
+    .info-count {
+      color: $text-highlight;
+      font-weight: 700;
+    }
+
+    .separator {
+      color: $text-separator;
+    }
+  }
+
+  // Zoom button styling
+  &__button {
+    padding: 0.25rem;
+    border-radius: 0.375rem;
+    color: $text-secondary;
+    transition: background-color 0.2s, color 0.2s;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $button-hover-bg;
+      color: $text-primary;
+    }
+  }
+
+  // Zoom level display
+  &__zoom-level {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: $text-tertiary;
+    width: 3rem;
+    text-align: center;
+  }
+}

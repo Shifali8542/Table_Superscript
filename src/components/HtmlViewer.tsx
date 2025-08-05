@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { HtmlNav } from './HtmlNav';
 import type { Highlight, StyleCounts } from '../types';
+import './HtmlViewer.scss'; // Import the new SCSS file
 
 interface HtmlViewerProps {
   currentPage: number;
@@ -28,14 +29,14 @@ export const HtmlViewer: React.FC<HtmlViewerProps> = ({
 
   const handleZoomIn = () => setZoom(prev => prev + 0.1);
   const handleZoomOut = () => setZoom(prev => Math.max(0.2, prev - 0.1));
-
+ 
   useEffect(() => {
     const loadHtmlContent = async () => {
       setIsLoading(true);
       setError(null);
       try {
         const filename = String(currentPage).padStart(3, '0');
-        const response = await fetch(`/html_output/complex_tables_all_${filename}.html`);
+        const response = await fetch(`html_output//complex_tables_all_${filename}.html`);
         if (!response.ok) throw new Error(`Failed to load page ${currentPage}`);
         let htmlContent = await response.text();
         htmlContent = htmlContent.replace(
@@ -155,7 +156,7 @@ export const HtmlViewer: React.FC<HtmlViewerProps> = ({
   const pageHighlights = highlights.filter(h => h.pageNumber === currentPage);
 
   return (
-    <div className="flex flex-col h-full bg-white">
+    <div className="html-viewer">
       <HtmlNav
         currentPage={currentPage}
         supCount={supCount}
@@ -163,22 +164,36 @@ export const HtmlViewer: React.FC<HtmlViewerProps> = ({
         onZoomIn={handleZoomIn}
         onZoomOut={handleZoomOut}
       />
-      <div className="flex-1 overflow-auto bg-gray-50 p-4">
+      <div className="html-viewer__content-area">
         {isLoading ? (
-          <div className="flex items-center justify-center h-full"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div></div>
+          <div className="html-viewer__loader-container">
+            <div className="html-viewer__spinner"></div>
+          </div>
         ) : error ? (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4"><h3 className="text-red-800 font-semibold">Error Loading Content</h3><p className="text-red-600 mt-1">{error}</p></div>
+          <div className="html-viewer__error-box">
+            <h3 className="html-viewer__error-title">Error Loading Content</h3>
+            <p className="html-viewer__error-message">{error}</p>
+          </div>
         ) : (
-          <div className="relative transition-transform" style={{ transform: `scale(${zoom})`, transformOrigin: 'top left', width: '100%', height: '100%' }}>
+          <div className="html-viewer__iframe-wrapper" style={{ transform: `scale(${zoom})` }}>
             <iframe
               ref={iframeRef}
               srcDoc={content}
               title={`HTML Output - Page ${currentPage}`}
-              className="w-full h-full border-0 rounded-lg shadow-sm bg-white"
+              className="html-viewer__iframe"
             />
-            <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
+            <div className="html-viewer__highlight-overlay">
               {pageHighlights.map(highlight => (
-                <div key={highlight.id} style={{ position: 'absolute', top: `${highlight.y}px`, left: `${highlight.x}px`, width: `${highlight.width}px`, height: `${highlight.height}px`, backgroundColor: 'rgba(255, 0, 0, 0.4)', borderRadius: '2px' }} />
+                <div 
+                  key={highlight.id} 
+                  className="html-viewer__highlight"
+                  style={{ 
+                    top: `${highlight.y}px`, 
+                    left: `${highlight.x}px`, 
+                    width: `${highlight.width}px`, 
+                    height: `${highlight.height}px`
+                  }} 
+                />
               ))}
             </div>
           </div>

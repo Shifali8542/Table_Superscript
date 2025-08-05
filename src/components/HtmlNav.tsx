@@ -1,5 +1,6 @@
 import React from 'react';
 import { FileText, ZoomIn, ZoomOut } from 'lucide-react';
+import './HtmlNav.scss'; // Import the new SCSS file
 
 interface HtmlNavProps {
   currentPage: number;
@@ -17,28 +18,28 @@ export const HtmlNav: React.FC<HtmlNavProps> = ({
   onZoomOut,
 }) => {
   return (
-    <div className="flex items-center justify-between p-3 bg-gray-50 border-b border-gray-200">
+    <div className="html-nav">
       {/* Left: Title */}
-      <div className="flex items-center space-x-2">
-        <FileText size={18} className="text-gray-600" />
-        <h2 className="font-semibold text-gray-800">HTML Output</h2>
+      <div className="html-nav__left">
+        <FileText size={18} className="html-nav__icon" />
+        <h2 className="html-nav__title">HTML Output</h2>
       </div>
 
       {/* Center: Zoom Controls */}
-      <div className="flex items-center space-x-3">
+      <div className="html-nav__center">
         <button
           onClick={onZoomOut}
-          className="p-1 rounded-md text-gray-600 hover:bg-gray-200 hover:text-gray-800 transition-colors"
+          className="html-nav__button"
           title="Zoom Out"
         >
           <ZoomOut size={20} />
         </button>
-        <span className="text-sm font-semibold text-gray-700 w-12 text-center">
+        <span className="html-nav__zoom-level">
           {Math.round(zoomLevel * 100)}%
         </span>
         <button
           onClick={onZoomIn}
-          className="p-1 rounded-md text-gray-600 hover:bg-gray-200 hover:text-gray-800 transition-colors"
+          className="html-nav__button"
           title="Zoom In"
         >
           <ZoomIn size={20} />
@@ -46,11 +47,11 @@ export const HtmlNav: React.FC<HtmlNavProps> = ({
       </div>
 
       {/* Right: Info */}
-      <div className="flex items-center space-x-4 text-sm text-gray-600">
-        <span className="font-medium">
-          Superscripts: <span className="text-green-600 font-bold">{supCount}</span>
+      <div className="html-nav__right">
+        <span className="html-nav__info-item">
+          Superscripts: <span className="html-nav__info-count">{supCount}</span>
         </span>
-        <span className="text-gray-300">|</span>
+        <span className="html-nav__separator">|</span>
         <span>Page {currentPage}</span>
       </div>
     </div>

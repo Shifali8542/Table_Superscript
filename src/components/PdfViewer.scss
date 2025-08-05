@@ -1,0 +1,68 @@
+// PdfViewer.scss
+
+// Variables for colors and styling
+$viewer-bg: #ffffff;
+$content-area-bg: #f9fafb; // Corresponds to gray-100
+$spinner-color: #2563eb; // Corresponds to blue-600
+$page-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); // Corresponds to shadow-lg
+
+// Main container for the PDF viewer
+.pdf-viewer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: $viewer-bg;
+
+  // The scrollable area holding the PDF document
+  &__content-area {
+    flex: 1;
+    overflow: auto;
+    background-color: $content-area-bg;
+  }
+
+  // Container for the document itself, used for positioning
+  &__document-container {
+    position: relative;
+  }
+
+  // Container for the loading spinner
+  &__loader-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 24rem; // Equivalent to h-96
+  }
+
+  // The animated spinner element
+  &__spinner {
+    height: 3rem; // Equivalent to h-12
+    width: 3rem; // Equivalent to w-12
+    border-radius: 50%;
+    border: 2px solid transparent;
+    border-bottom-color: $spinner-color;
+    animation: spin 1s linear infinite;
+  }
+
+  // Keyframes for the spinner animation
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  // Styling the Document component from react-pdf
+  .react-pdf__Document {
+    display: flex;
+    flex-direction: column;
+    align-items: center; // Center the page horizontally
+    padding: 1rem 0; // Add some vertical padding
+  }
+
+  // Styling the Page component from react-pdf
+  .react-pdf__Page {
+    box-shadow: $page-shadow;
+  }
+}
